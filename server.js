@@ -73,6 +73,8 @@ mongoose.connect(dbUrl, {
   console.log('mongodb connected', err);
 });
 
-var server = http.listen(3000, () => {
-  console.log('server is running on port', server.address().port);
+const port = process.env.PORT || 5000;
+
+app.listen(port, () => {
+  console.log(`Starting on ${port}`);
 });
