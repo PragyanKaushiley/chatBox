@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <br>
+    <div class="jumbotron">
+      <h1 class="display-4">Send Message</h1>
+      <br>
+      <input id="name" class="form-control" placeholder="Name">
+      <br>
+      <textarea id="message" class="form-control" placeholder="Your Message Here"></textarea>
+      <br>
+      <button id="send" class="btn btn-success">Send</button>
+    </div>
+    <div class="container">
+      <div id="messages">
+      </div>
+    </div>
+  </div>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="http://172.16.23.154:3000/socket.io/socket.io.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+    var socket = io();
+
+    $(() => {
+      $("#send").click(() => {
+        sendMessage({
+          name: $("#name").val(),
+          message: $("#message").val()
+        });
+      })
+      getMessages()
+    })
+
+
+    function addMessages(message) {
+      $("#messages").append(`
+        <h4> ${message.name} </h4>
+        <p>  ${message.message} </p>`)
+    }
+
+    socket.on('message', addMessages)
+
+    function getMessages() {
+      $.get('http://172.16.23.154:3000/messages', (data) => {
+        data.forEach(addMessages);
+      })
+    }
+
+    function sendMessage(message) {
+      $.post('http://172.16.23.154:3000/messages', message)
+    }
+  </script>
+
+</body>
+
+</html>
