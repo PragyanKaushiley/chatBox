@@ -1,10 +1,7 @@
 var express = require('express');
-var bodyParser = require('body-parser')
-
-var app = express();
-
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var bodyParser = require('body-parser'),
+    app = express.createServer(express.logger()),
+    io = require('socket.io').listen(app);
 var mongoose = require('mongoose');
 
 app.use(express.static(__dirname));
@@ -12,6 +9,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
+
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
+
 
 var Message = mongoose.model('Message', {
   name: String,
@@ -63,8 +66,12 @@ app.post('/messages', async (req, res) => {
   }
 });
 
-io.on('connection', () => {
-  console.log('a user is connected')
+io.on('connection', function (socket) {
+  io.sockets.emit('status', { status: status }); // note the use of io.sockets to emit but socket.on to listen
+  socket.on('reset', function (data) {
+    status = "War is imminent!";
+    io.sockets.emit('status', { status: status });
+  });
 });
 
 mongoose.connect(dbUrl, {
