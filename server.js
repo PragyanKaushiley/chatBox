@@ -14,11 +14,6 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-io.configure(function () { 
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
-});
-
 var Message = mongoose.model('Message', {
   name: String,
   message: String
@@ -69,8 +64,12 @@ app.post('/messages', async (req, res) => {
   }
 });
 
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
 
-io.on('connection', () => {
+io.sockets.on('connection', () => {
   console.log('a user is connected')
 });
 
