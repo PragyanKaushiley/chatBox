@@ -14,6 +14,11 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
+
 var Message = mongoose.model('Message', {
   name: String,
   message: String
