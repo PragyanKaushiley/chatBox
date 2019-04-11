@@ -32,7 +32,7 @@
   <script src="/node_modules/socket.io-client/dist/socket.io.js"></script>
 
   <script>
-    var socket = io.connect(window.location.hostname);
+    var socket = io("https://test-api32.herokuapp.com/");
 
     $(() => {
       $("#send").click(() => {
