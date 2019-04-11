@@ -54,13 +54,13 @@
     socket.on('message', addMessages)
 
     function getMessages() {
-      $.get('https://test-api32.herokuapp.com/messages', (data) => {
+      $.get("https://test-api32.herokuapp.com/messages", (data) => {
         data.forEach(addMessages);
       })
     }
 
     function sendMessage(message) {
-      $.post('https://test-api32.herokuapp.com/messages', message)
+      $.post("https://test-api32.herokuapp.com/messages", message)
     }
   </script>
 
